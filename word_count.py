@@ -24,7 +24,8 @@ def clean_text(dataframe):
     #
     dataframe = dataframe.copy()
     dataframe["text"] = dataframe["text"].str.lower()
-    dataframe["text"] = dataframe["text"].str.replace(",","").replace(".","")
+    dataframe["text"] = dataframe["text"].str.replace(",","")
+    dataframe["text"] = dataframe["text"].str.replace(".","")
     return dataframe
 
 
@@ -32,11 +33,11 @@ def count_words(dataframe):
     """Word count"""
     dataframe = dataframe.copy()
     dataframe["text"] = dataframe["text"].str.split(" ")
-    dataframe.to_csv('file1.csv')
     dataframe=dataframe.explode('text').reset_index(drop=True)
     dataframe['value'] = 1
-    conteo = dataframe.groupby(['text'],as_index=False).agg(["sum"])
-    dataframe = dataframe.rename(columns={"text":"words"})
+    conteo = dataframe.groupby(['text'],as_index=False).agg({'value':'sum'})
+    conteo = conteo.rename(columns={'text':'word'})
+    conteo = conteo.rename(columns={'value':'count'})
     return conteo
 
 
